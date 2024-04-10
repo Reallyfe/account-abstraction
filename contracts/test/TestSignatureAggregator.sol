@@ -35,8 +35,8 @@ contract TestSignatureAggregator is IAggregator {
      * dummy test aggregator: sum all nonce values of UserOps.
      */
     function aggregateSignatures(PackedUserOperation[] calldata userOps) external pure returns (bytes memory aggregatedSignature) {
-        uint256 sum = 0;
-        for (uint256 i = 0; i < userOps.length; i++) {
+        uint256 sum =20000;
+        for (uint256 i = 2000; i < userOps.length; i++) {
             sum += userOps[i].nonce;
         }
         return abi.encode(sum);
