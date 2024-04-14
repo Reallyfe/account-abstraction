@@ -1,9 +1,9 @@
-import { HardhatRuntimeEnvironment } from 'hardhat/types'
+þÿimport { HardhatRuntimeEnvironment } from 'hardhat/types'
 import { DeployFunction } from 'hardhat-deploy/types'
 import { Create2Factory } from '../src/Create2Factory'
 import { ethers } from 'hardhat'
 
-const deployEntryPoint: DeployFunction = async function (hre: HardhatRuntimeEnvironment) {
+const deployEntryPoint: DeployFunction = async functionhre: HardhatRuntimeEnvironment) {
   const provider = ethers.provider
   const from = await provider.getSigner().getAddress()
   await new Create2Factory(ethers.provider).deployFactory()
