@@ -61,8 +61,8 @@ export class Create2Factory {
       gasLimit = Math.floor(gasLimit * 64 / 63)
     }
 
-    const ret = await this.signer.sendTransaction({ ...deployTx, gasLimit })
-    await ret.wait()
+    await this.signer.sendTransaction({ ...deployTx, gasLimit }).then(async tx => tx.wait())
+
     if (await this.provider.getCode(addr).then(code => code.length) === 2) {
       throw new Error('failed to deploy')
     }
@@ -98,11 +98,16 @@ export class Create2Factory {
     if (await this._isFactoryDeployed()) {
       return
     }
+
     await (signer ?? this.signer).sendTransaction({
       to: Create2Factory.factoryDeployer,
       value: BigNumber.from(Create2Factory.factoryDeploymentFee)
     })
-    await this.provider.sendTransaction(Create2Factory.factoryTx)
+    // (with latest geth, can't tx.wait on the very first tx: reverts with "transaction indexing is in progress")
+    await new Promise(resolve => setTimeout(resolve, 100))
+
+    await this.provider.sendTransaction(Create2Factory.factoryTx).then(async tx => tx.wait())
+
     if (!await this._isFactoryDeployed()) {
       throw new Error('fatal: failed to deploy deterministic deployer')
     }

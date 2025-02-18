@@ -7,7 +7,7 @@ pragma solidity ^0.8.23;
 import "@openzeppelin/contracts/utils/Create2.sol";
 import "@openzeppelin/contracts/proxy/ERC1967/ERC1967Proxy.sol";
 
-import "../samples/SimpleAccount.sol";
+import "../accounts/SimpleAccount.sol";
 import "../interfaces/IAccountExecute.sol";
 
 /**
@@ -23,7 +23,7 @@ contract TestExecAccount is SimpleAccount, IAccountExecute {
     event Executed(PackedUserOperation userOp, bytes innerCallRet);
 
     function executeUserOp(PackedUserOperation calldata userOp, bytes32 /*userOpHash*/) external {
-        _requireFromEntryPointOrOwner();
+        _requireForExecute();
 
         // read from the userOp.callData, but skip the "magic" prefix (executeUserOp sig),
         // which caused it to call this method.
